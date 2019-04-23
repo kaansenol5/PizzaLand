@@ -54,8 +54,8 @@ class Ui_Dialog(object):
         zip_ref= zipfile.ZipFile("game.zip","r")
         zip_ref.extractall("")
         os.remove("game.zip")
-        shutil.move("game/assets","assets")
-        shutil.move("game/PizzaLandGame.py","PizzaLandGame.py")
+        shutil.move("PizzaLand-master/assets","assets")
+        shutil.move("PizzaLand-master/PizzaLandGame.py","PizzaLandGame.py")
         self.val=100
         self.progressBar.setProperty("value", self.val)
         time.sleep(1)

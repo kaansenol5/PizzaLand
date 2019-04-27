@@ -1,22 +1,12 @@
-import subprocess
-try:
-    from PyQt5 import QtCore, QtGui, QtWidgets
-    from PyQt5.QtWidgets import QApplication,QWidget
-except ImportError:
-    x=input("Required libraries are not installed, do you want to install them y/n   ")
-    if x == "y":
-        subprocess.call(["python3","-m","pip","install","PyQt5"])
-    else:
-        exit()
-
-
-import sys
-import requests
-import zipfile
 import os
-import time
 import shutil
-
+import sys
+import time
+import zipfile
+import subprocess
+import requests
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication
 
 try:
     shutil.rmtree("assets")
@@ -24,12 +14,14 @@ try:
 except Exception:
     pass
 
-dlLink="https://github.com/kaansenol5/PizzaLand/archive/release.zip"
+dlLink = "https://github.com/kaansenol5/PizzaLand/archive/release.zip"
+
+
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(751, 552)
-        self.val=0
+        self.val = 0
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(200, 70, 361, 121))
         self.label.setObjectName("label")
@@ -47,36 +39,42 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("PizzaLand", "PizzaLand"))
-        self.label.setText(_translate("PizzaLand", "<html><head/><body><p><span style=\" font-size:26pt; font-weight:600;\">PizzaLand Launcher</span></p></body></html>"))
+        self.label.setText(_translate("PizzaLand",
+                                      "<html><head/><body><p><span style=\" font-size:26pt; font-weight:600;\">PizzaLand Launcher</span></p></body></html>"))
         self.pushButton.setText(_translate("PizzaLand", "Play"))
 
     def downLoadGame(self):
-        self.val=25
+        print("aaaaaaaa")
+        self.val = 25
         self.progressBar.setProperty("value", self.val)
         r = requests.get(dlLink)
-        self.val=30
+        self.val = 30
         self.progressBar.setProperty("value", self.val)
-        with open("game.zip","wb") as f:
+        with open("game.zip", "wb") as f:
             f.write(r.content)
-            self.val=50
+            self.val = 50
             self.progressBar.setProperty("value", self.val)
-        zip_ref= zipfile.ZipFile("game.zip","r")
+        zip_ref = zipfile.ZipFile("game.zip", "r")
         zip_ref.extractall("")
         os.remove("game.zip")
+        shutil.move("PizzaLand-release/assets", "assets")
+        shutil.move("PizzaLand-release/PizzaLandGame.py", "PizzaLandGame.py")
         os.remove("launcher.py")
-        shutil.move("PizzaLand-release/assets","assets")
-        shutil.move("PizzaLand-release/launcher.py","launcher.py")
-        shutil.move("PizzaLand-release/PizzaLandGame.py","PizzaLandGame.py")
-        os.remove("PizzaLand-release")
-        self.val=100
+        shutil.move("PizzaLand-release/launcher.py", "launcher.py")
+        self.val = 100
         self.progressBar.setProperty("value", self.val)
         time.sleep(1)
+        try:
+            import pygame
+        except ImportError:
+            subprocess.call(["python3", "-m", "pip", "install", "pygame"])
         os.system("python3 PizzaLandGame.py")
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.processEvents()
-    MainWindow= QtWidgets.QMainWindow()
+    MainWindow = QtWidgets.QMainWindow()
     ui = Ui_Dialog()
     ui.setupUi(MainWindow)
     MainWindow.show()

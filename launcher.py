@@ -1,5 +1,15 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication,QWidget
+import subprocess
+try:
+    from PyQt5 import QtCore, QtGui, QtWidgets
+    from PyQt5.QtWidgets import QApplication,QWidget
+except ImportError:
+    x=input("Required libraries are not installed, do you want to install them y/n   ")
+    if x == "y":
+        subprocess.call(["python3","-m","pip","install","PyQt5"])
+    else:
+        exit()
+
+
 import sys
 import requests
 import zipfile
@@ -14,7 +24,7 @@ try:
 except Exception:
     pass
 
-dlLink="https://github.com/kaansenol5/PizzaLand/archive/master.zip"
+dlLink="https://github.com/kaansenol5/PizzaLand/archive/release.zip"
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -41,7 +51,6 @@ class Ui_Dialog(object):
         self.pushButton.setText(_translate("PizzaLand", "Play"))
 
     def downLoadGame(self):
-        print("aaaaaaaa")
         self.val=25
         self.progressBar.setProperty("value", self.val)
         r = requests.get(dlLink)
@@ -54,8 +63,11 @@ class Ui_Dialog(object):
         zip_ref= zipfile.ZipFile("game.zip","r")
         zip_ref.extractall("")
         os.remove("game.zip")
-        shutil.move("PizzaLand-master/assets","assets")
-        shutil.move("PizzaLand-master/PizzaLandGame.py","PizzaLandGame.py")
+        os.remove("launcher.py")
+        shutil.move("PizzaLand-release/assets","assets")
+        shutil.move("PizzaLand-release/launcher.py","launcher.py")
+        shutil.move("PizzaLand-release/PizzaLandGame.py","PizzaLandGame.py")
+        os.remove("PizzaLand-release")
         self.val=100
         self.progressBar.setProperty("value", self.val)
         time.sleep(1)

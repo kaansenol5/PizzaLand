@@ -63,7 +63,7 @@ def downLoadGame(offline=True):
 
 def setdefault(default,thing):
     config.set("launcher", thing, default)
-    with open("launcherconfig.config","wb") as f:
+    with open("launcherconfig.config", "w") as f:
         config.write(f)
         
 def cmdLauncher():

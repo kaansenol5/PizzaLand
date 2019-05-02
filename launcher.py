@@ -27,6 +27,7 @@ class colors():
 
 cmdhelp = f""""{colors.RED}
 launch                     Launches the game
+launch-offline             Launches the game but doesnt download
 set-default-style-cmd      sets the default launcher to command line
 set-default-style-gui      sets the default launcher to gui
 set-default-branch-release sets the default git branch to release
@@ -35,24 +36,25 @@ help                       displays this message {colors.RESET}
 """
 
 
-def downLoadGame():
-    try:
-        shutil.rmtree("assets")
-        os.remove("PizzaLandGame.py")
-    except Exception:
-        pass
-    dlLink = f"https://github.com/kaansenol5/PizzaLand/archive/{branch}.zip"
-    r = requests.get(dlLink)
-    with open("game.zip", "wb") as f:
-        f.write(r.content)
-    zip_ref = zipfile.ZipFile("game.zip", "r")
-    zip_ref.extractall("")
-    os.remove("game.zip")
-    shutil.move("PizzaLand-release/assets", "assets")
-    shutil.move("PizzaLand-release/PizzaLandGame.py", "PizzaLandGame.py")
-    os.remove("launcher.py")
-    shutil.move("PizzaLand-release/launcher.py", "launcher.py")
-    time.sleep(1)
+def downLoadGame(offline=True):
+    if not offline:
+        try:
+            shutil.rmtree("assets")
+            os.remove("PizzaLandGame.py")
+        except Exception:
+            pass
+        dlLink = f"https://github.com/kaansenol5/PizzaLand/archive/{branch}.zip"
+        r = requests.get(dlLink)
+        with open("game.zip", "wb") as f:
+            f.write(r.content)
+        zip_ref = zipfile.ZipFile("game.zip", "r")
+        zip_ref.extractall("")
+        os.remove("game.zip")
+        shutil.move("PizzaLand-release/assets", "assets")
+        shutil.move("PizzaLand-release/PizzaLandGame.py", "PizzaLandGame.py")
+        os.remove("launcher.py")
+        shutil.move("PizzaLand-release/launcher.py", "launcher.py")
+        time.sleep(1)
     try:
         import pygame
     except ImportError:
@@ -74,6 +76,8 @@ def cmdLauncher():
         cmd=input()
         if cmd == "launch":
             downLoadGame()
+        if cmd == "launch-offline":
+            downLoadGame(True)
         elif cmd == "set-default-style-gui":
             setdefault("gui","default-style")
         elif cmd == "set-default-style-cmd":
@@ -100,7 +104,7 @@ def guiLauncher():
             self.pushButton = QtWidgets.QPushButton(Dialog)
             self.pushButton.setGeometry(QtCore.QRect(220, 370, 301, 81))
             self.pushButton.setObjectName("pushButton")
-            self.pushButton.clicked.connect(downLoadGame())
+            self.pushButton.clicked.connect(downLoadGame)
             self.retranslateUi(Dialog)
             QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -111,15 +115,14 @@ def guiLauncher():
                                           "<html><head/><body><p><span style=\" font-size:26pt; font-weight:600;\">PizzaLand Launcher</span></p></body></html>"))
             self.pushButton.setText(_translate("PizzaLand", "Play"))
 
-    if default == "gui":
-        if __name__ == '__main__':
-            app = QApplication(sys.argv)
-            app.processEvents()
-            MainWindow = QtWidgets.QMainWindow()
-            ui = Ui_Dialog()
-            ui.setupUi(MainWindow)
-            MainWindow.show()
-            sys.exit(app.exec_())
+    if __name__ == '__main__':
+        app = QApplication(sys.argv)
+        app.processEvents()
+        MainWindow = QtWidgets.QMainWindow()
+        ui = Ui_Dialog()
+        ui.setupUi(MainWindow)
+        MainWindow.show()
+        sys.exit(app.exec_())
 
 
 if default == "gui":

@@ -67,10 +67,10 @@ def setdefault(default,thing):
         config.write(f)
         
 def cmdLauncher():
-    print(f"{colors.CYAN} Welcome to the command-line pizzaland launcher!")
+    print(f"{colors.CYAN}Welcome to the command-line pizzaland launcher!")
     print('If you want to save this option, type "save" to the command line')
     print("To display a list of comments, type help")
-    print("You are on your own")
+    print(f"You are on your own{colors.RESET}")
     cmdline=True
     while cmdline:
         cmd=input()

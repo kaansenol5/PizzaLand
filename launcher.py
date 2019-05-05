@@ -50,10 +50,10 @@ def downLoadGame(offline=True):
         zip_ref = zipfile.ZipFile("game.zip", "r")
         zip_ref.extractall("")
         os.remove("game.zip")
-        shutil.move("PizzaLand-release/assets", "assets")
-        shutil.move("PizzaLand-release/PizzaLandGame.py", "PizzaLandGame.py")
+        shutil.move(f"PizzaLand-{branch}/assets", "assets")
+        shutil.move(f"PizzaLand-{branch}/PizzaLandGame.py", "PizzaLandGame.py")
         os.remove("launcher.py")
-        shutil.move("PizzaLand-release/launcher.py", "launcher.py")
+        shutil.move(f"PizzaLand-{branch}/launcher.py", "launcher.py")
         time.sleep(1)
     try:
         import pygame
@@ -75,7 +75,7 @@ def cmdLauncher():
     while cmdline:
         cmd=input()
         if cmd == "launch":
-            downLoadGame()
+            downLoadGame(False)
         if cmd == "launch-offline":
             downLoadGame(True)
         elif cmd == "set-default-style-gui":
